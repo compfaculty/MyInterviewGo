@@ -1,67 +1,77 @@
 package ADT
 
-type Node struct {
-	key  string
-	next *Node
-}
-type LinkedList struct {
-	head  *Node
-	count int
+import "fmt"
+
+type Node[T AlNum] struct {
+	Value T
+	Next  *Node[T]
 }
 
-func (l *LinkedList) Prepend(n *Node) {
-	currentHead := l.head
-	n.next, l.head = currentHead, n
-	//l.head.next = currentHead
-	l.count++
-
+type LinkedList[T AlNum] struct {
+	Head *Node[T]
+	Tail *Node[T]
 }
-func (l *LinkedList) Insert(v string) {
-	if !l.Contains(v) {
-		node := &Node{key: v}
-		node.next = l.head
-		l.head = node
-		l.count++
+
+func (l *LinkedList[T]) Append(value T) {
+	newNode := &Node[T]{Value: value}
+	if l.Head == nil {
+		l.Head = newNode
+	} else {
+		l.Tail.Next = newNode
+	}
+	l.Tail = newNode
+}
+
+func (l *LinkedList[T]) Prepend(value T) {
+	newNode := &Node[T]{Value: value, Next: l.Head}
+	l.Head = newNode
+	if l.Tail == nil {
+		l.Tail = newNode
+	}
+}
+
+func (l *LinkedList[T]) Remove(value T) {
+	if l.Head == nil {
+		return
 	}
 
-}
-func (l *LinkedList) Delete(v string) *Node {
-	var ret *Node
-	if l.head.key == v {
-		ret = l.head
-		l.head = l.head.next
-		l.count--
-		return ret
-	}
-
-	prev := l.head
-	for prev.next != nil {
-		if prev.next.key == v {
-			ret = prev.next
-			prev.next = prev.next.next
-			l.count--
-			return ret
+	if l.Head.Value == value {
+		l.Head = l.Head.Next
+		if l.Head == nil {
+			l.Tail = nil
 		}
-		prev = prev.next
+		return
 	}
-	return nil
-}
 
-func (l *LinkedList) Get(v string) *Node {
-	current := l.head
-	for current != nil {
-		if current.key == v {
-			return current
+	currentNode := l.Head
+	for currentNode.Next != nil {
+		if currentNode.Next.Value == value {
+			currentNode.Next = currentNode.Next.Next
+			if currentNode.Next == nil {
+				l.Tail = currentNode
+			}
+			return
 		}
-		current = current.next
+		currentNode = currentNode.Next
 	}
-	return nil
 }
 
-func (l *LinkedList) Contains(v string) bool {
-	ret := l.Get(v)
-	if ret == nil || ret.key != v {
-		return false
+func (l *LinkedList[T]) Contains(value T) bool {
+	currentNode := l.Head
+	for currentNode != nil {
+		if currentNode.Value == value {
+			return true
+		}
+		currentNode = currentNode.Next
 	}
-	return true
+	return false
+}
+
+func (l *LinkedList[T]) Print() {
+	currentNode := l.Head
+	for currentNode != nil {
+		fmt.Print(currentNode.Value, " ")
+		currentNode = currentNode.Next
+	}
+	fmt.Println()
 }

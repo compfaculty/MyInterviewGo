@@ -5,7 +5,7 @@ import (
 )
 
 func TestHeap(t *testing.T) {
-
+	//largest first
 	heapMax := NewHeap[int](func(a, b int) bool {
 		return a > b
 	})
@@ -38,6 +38,7 @@ func TestHeap(t *testing.T) {
 	if r, err := heapMax.Pop(); err != nil {
 		t.Fatalf(`want error %v,  got value %v and error nil`, err, r)
 	}
+	// smallest first
 	heapMin := NewHeap[int](func(a, b int) bool {
 		return a < b
 	})

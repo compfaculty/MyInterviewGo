@@ -2,10 +2,6 @@ package ADT
 
 import "fmt"
 
-type Integer interface {
-	int8 | int16 | int32 | int64 | int
-}
-
 // Heap is a min-heap of any type.
 type Heap[T Integer] struct {
 	values []T
@@ -43,12 +39,6 @@ func (h *Heap[T]) Pop() (T, error) {
 	if n == 0 {
 		panic("pop from empty heap")
 	}
-	//for min
-	//x := h.values[n-1]
-	//h.values[n-1] = h.values[0]
-	//h.values = h.values[:n-1]
-	//h.heapfyDown(0, n-1)
-
 	x := h.values[0]
 	h.values[0] = h.values[n-1]
 	h.values = h.values[:n-1]

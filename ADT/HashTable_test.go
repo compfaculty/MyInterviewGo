@@ -5,7 +5,7 @@ import (
 )
 
 func TestHashTable(t *testing.T) {
-	ht := NewHashTable()
+	ht := NewHashTable[string]()
 	t.Logf("%#v", ht)
 	ht.Insert("test")  //&LinkedList{&Node{key: "a", next: nil}}
 	ht.Insert("test1") //&LinkedList{&Node{key: "a", next: nil}}
@@ -20,15 +20,11 @@ func TestHashTable(t *testing.T) {
 	if !ht.Search("test2") {
 		t.Fatalf(`want %v == %v`, "test2", false)
 	}
-	if n := ht.Delete("test"); n == nil || n.key != "test" {
-		t.Fatalf(`want node %v with key == %v`, n, "test")
-	}
+	ht.Remove("test")
 	if ht.Search("test") {
 		t.Fatalf(`want test key missing but it exists`)
 	}
-	if n := ht.Delete("test1"); n == nil || n.key != "test1" {
-		t.Fatalf(`want node %v with key == %v`, n, "test1")
-	}
+	ht.Remove("test1")
 	if ht.Search("test1") {
 		t.Fatalf(`want test key missing but it exists`)
 	}
